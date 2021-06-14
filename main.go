@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/bitrise-io/go-steputils/stepconf"
 	"github.com/bitrise-io/go-utils/log"
@@ -53,6 +54,15 @@ func releaseCommits(dir string) ([]git.Commit, error) {
 			continue
 		}
 		if !includeFirst && commit.Date.Equal(startCommit.Date) {
+			continue
+		}
+		if strings.HasPrefix(commit.Message, "Merge pull request") {
+			commit.Message = strings.Replace(commit.Message, "Merge pull request", "PR", 1)
+			fromIndex := strings.Index(commit.Message, " from")
+			prefix := commit.Message[:fromIndex]
+			suffix := commit.Message[fromIndex + 16 : len(commit.Message)]
+			commit.Message = prefix + ": " + suffix
+		} else {
 			continue
 		}
 		if commit.Date.After(endCommit.Date) {
