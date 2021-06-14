@@ -1,6 +1,7 @@
 # Generate Changelog
 
 Genereates Changelog based on git commits.
+This fork is a slightly modified version of the original step with some ad-hoc formatting on the changelog.
 
 ## How to use this Step
 
